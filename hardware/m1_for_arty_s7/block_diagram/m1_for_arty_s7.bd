@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<bd:repository xmlns:bd="http://www.xilinx.com/bd" bd:BoundaryCRC="0xCE78B2ADDFCA021E" bd:device="xc7s50csga324-1" bd:isValidated="true" bd:synthFlowMode="None" bd:tool_version="2018.2" bd:top="m1_for_arty_s7" bd:version="1.00.a">
+<bd:repository xmlns:bd="http://www.xilinx.com/bd" bd:BoundaryCRC="0xE6D8A172A3799D3B" bd:device="xc7s50csga324-1" bd:isValidated="true" bd:synthFlowMode="None" bd:tool_version="2018.2" bd:top="m1_for_arty_s7" bd:version="1.00.a">
 
   <spirit:component xmlns:spirit="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1685-2009">
     <spirit:vendor>xilinx.com</spirit:vendor>
@@ -151,23 +151,7 @@
           </spirit:wire>
         </spirit:port>
         <spirit:port>
-          <spirit:name>swdo</spirit:name>
-          <spirit:wire>
-            <spirit:direction>out</spirit:direction>
-            <spirit:vector>
-              <spirit:left>0</spirit:left>
-              <spirit:right>0</spirit:right>
-            </spirit:vector>
-          </spirit:wire>
-        </spirit:port>
-        <spirit:port>
           <spirit:name>reset</spirit:name>
-          <spirit:wire>
-            <spirit:direction>in</spirit:direction>
-          </spirit:wire>
-        </spirit:port>
-        <spirit:port>
-          <spirit:name>swdi</spirit:name>
           <spirit:wire>
             <spirit:direction>in</spirit:direction>
           </spirit:wire>
@@ -179,9 +163,9 @@
           </spirit:wire>
         </spirit:port>
         <spirit:port>
-          <spirit:name>swdoen</spirit:name>
+          <spirit:name>swio</spirit:name>
           <spirit:wire>
-            <spirit:direction>out</spirit:direction>
+            <spirit:direction>inout</spirit:direction>
           </spirit:wire>
         </spirit:port>
       </spirit:ports>
@@ -318,6 +302,13 @@
           <spirit:configurableElementValue spirit:referenceId="ITCM_INIT_FILE">bram_s7.hex</spirit:configurableElementValue>
         </spirit:configurableElementValues>
       </spirit:componentInstance>
+      <spirit:componentInstance>
+        <spirit:instanceName>iopin_0</spirit:instanceName>
+        <spirit:componentRef spirit:library="user" spirit:name="iopin" spirit:vendor="xilinx.com" spirit:version="1.0"/>
+        <spirit:configurableElementValues>
+          <spirit:configurableElementValue spirit:referenceId="bd:xciName">m1_for_arty_s7_iopin_0_0</spirit:configurableElementValue>
+        </spirit:configurableElementValues>
+      </spirit:componentInstance>
     </spirit:componentInstances>
     <spirit:interconnections>
       <spirit:interconnection>
@@ -441,29 +432,34 @@
         <spirit:internalPortReference spirit:componentRef="CORTEXM1_AXI_0" spirit:portRef="DBGRESETn"/>
       </spirit:adHocConnection>
       <spirit:adHocConnection>
-        <spirit:name>CORTEXM1_AXI_0_SWDO</spirit:name>
-        <spirit:internalPortReference spirit:componentRef="CORTEXM1_AXI_0" spirit:portRef="SWDO"/>
-        <spirit:externalPortReference spirit:portRef="swdo"/>
-      </spirit:adHocConnection>
-      <spirit:adHocConnection>
-        <spirit:name>SWDITMS_0_1</spirit:name>
-        <spirit:externalPortReference spirit:portRef="swdi"/>
-        <spirit:internalPortReference spirit:componentRef="CORTEXM1_AXI_0" spirit:portRef="SWDITMS"/>
-      </spirit:adHocConnection>
-      <spirit:adHocConnection>
         <spirit:name>SWCLKTCK_0_1</spirit:name>
         <spirit:externalPortReference spirit:portRef="swclk"/>
         <spirit:internalPortReference spirit:componentRef="CORTEXM1_AXI_0" spirit:portRef="SWCLKTCK"/>
       </spirit:adHocConnection>
       <spirit:adHocConnection>
-        <spirit:name>CORTEXM1_AXI_0_SWDOEN</spirit:name>
-        <spirit:internalPortReference spirit:componentRef="CORTEXM1_AXI_0" spirit:portRef="SWDOEN"/>
-        <spirit:externalPortReference spirit:portRef="swdoen"/>
-      </spirit:adHocConnection>
-      <spirit:adHocConnection>
         <spirit:name>xlconstant_1_dout</spirit:name>
         <spirit:internalPortReference spirit:componentRef="xlconstant_1" spirit:portRef="dout"/>
         <spirit:internalPortReference spirit:componentRef="CORTEXM1_AXI_0" spirit:portRef="CFGITCMEN"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>Net</spirit:name>
+        <spirit:externalPortReference spirit:portRef="swio"/>
+        <spirit:internalPortReference spirit:componentRef="iopin_0" spirit:portRef="io"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>iopin_0_o</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="iopin_0" spirit:portRef="o"/>
+        <spirit:internalPortReference spirit:componentRef="CORTEXM1_AXI_0" spirit:portRef="SWDITMS"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>CORTEXM1_AXI_0_SWDOEN</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="CORTEXM1_AXI_0" spirit:portRef="SWDOEN"/>
+        <spirit:internalPortReference spirit:componentRef="iopin_0" spirit:portRef="t"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>CORTEXM1_AXI_0_SWDO</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="CORTEXM1_AXI_0" spirit:portRef="SWDO"/>
+        <spirit:internalPortReference spirit:componentRef="iopin_0" spirit:portRef="i"/>
       </spirit:adHocConnection>
     </spirit:adHocConnections>
     <spirit:hierConnections>
@@ -2526,7 +2522,7 @@
         <spirit:instanceName>auto_pc</spirit:instanceName>
         <spirit:componentRef spirit:library="ip" spirit:name="axi_protocol_converter" spirit:vendor="xilinx.com" spirit:version="2.1"/>
         <spirit:configurableElementValues>
-          <spirit:configurableElementValue spirit:referenceId="bd:xciName">m1_for_arty_s7_auto_pc_4</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="bd:xciName">m1_for_arty_s7_auto_pc_0</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="SI_PROTOCOL">AXI3</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="MI_PROTOCOL">AXI4LITE</spirit:configurableElementValue>
         </spirit:configurableElementValues>

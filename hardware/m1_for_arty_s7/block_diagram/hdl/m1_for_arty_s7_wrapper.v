@@ -1,7 +1,7 @@
 //Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2018.2 (win64) Build 2258646 Thu Jun 14 20:03:12 MDT 2018
-//Date        : Fri Sep 11 22:03:15 2020
+//Date        : Sat Sep 12 17:55:40 2020
 //Host        : QOSMIO running 64-bit major release  (build 9200)
 //Command     : generate_target m1_for_arty_s7_wrapper.bd
 //Design      : m1_for_arty_s7_wrapper
@@ -23,9 +23,7 @@ module m1_for_arty_s7_wrapper
     reset,
     rgb_led_tri_o,
     swclk,
-    swdi,
-    swdo,
-    swdoen,
+    swio,
     sys_clock);
   input UART_0_rxd;
   output UART_0_txd;
@@ -40,9 +38,7 @@ module m1_for_arty_s7_wrapper
   input reset;
   output [5:0]rgb_led_tri_o;
   input swclk;
-  input swdi;
-  output [0:0]swdo;
-  output swdoen;
+  inout swio;
   input sys_clock;
 
   wire UART_0_rxd;
@@ -73,9 +69,7 @@ module m1_for_arty_s7_wrapper
   wire reset;
   wire [5:0]rgb_led_tri_o;
   wire swclk;
-  wire swdi;
-  wire [0:0]swdo;
-  wire swdoen;
+  wire swio;
   wire sys_clock;
 
   m1_for_arty_s7 m1_for_arty_s7_i
@@ -102,9 +96,7 @@ module m1_for_arty_s7_wrapper
         .reset(reset),
         .rgb_led_tri_o(rgb_led_tri_o),
         .swclk(swclk),
-        .swdi(swdi),
-        .swdo(swdo),
-        .swdoen(swdoen),
+        .swio(swio),
         .sys_clock(sys_clock));
   IOBUF qspi_flash_io0_iobuf
        (.I(qspi_flash_io0_o),

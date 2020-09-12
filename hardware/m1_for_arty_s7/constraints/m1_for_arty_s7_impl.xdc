@@ -33,11 +33,8 @@
 # JTAG connected to PMOD connector JC (nearest to device)
 # Pin-out is detailed below
 # JC1_P.  JC[1]
-set_property PACKAGE_PIN R14 [get_ports TDO[0]]
 # JC1_N.  JC[2]
-set_property PACKAGE_PIN T14 [get_ports TDI]
 # JC2_P.  JC[3]
-set_property PACKAGE_PIN R16 [get_ports nTRST]
 # Note TCK is shared with SWCLK.  Therefore to drive JTAG, besides the pins above
 # the user must also connect to shield pin IO41 = connector IOH pin 16.
 
@@ -51,8 +48,6 @@ set_property PACKAGE_PIN R16 [get_ports nTRST]
 #  <pin index="18" name ="usb_uart_rxd" iostandard="LVCMOS33" loc="V12"/>
 #  <pin index="19" name ="usb_uart_txd" iostandard="LVCMOS33" loc="R12"/>
 
-set_property PACKAGE_PIN V12 [get_ports usb_uart_rxd]
-set_property PACKAGE_PIN R12 [get_ports usb_uart_txd]
 
 # --------------------------------------------------
 # Define pins on Shield [41:26]
@@ -77,27 +72,10 @@ set_property PACKAGE_PIN R12 [get_ports usb_uart_txd]
 #  <pin index="82" name ="JD9" iostandard="LVCMOS33"  loc="T11"/>
 #  <pin index="83" name ="JD10" iostandard="LVCMOS33" loc="U11"/>
 
-set_property PACKAGE_PIN U11 [get_ports {DAPLink_tri_o[0]}]
-set_property PACKAGE_PIN T11 [get_ports {DAPLink_tri_o[1]}]
-set_property PACKAGE_PIN R11 [get_ports {DAPLink_tri_o[2]}]
-set_property PACKAGE_PIN T13 [get_ports {DAPLink_tri_o[3]}]
-set_property PACKAGE_PIN T12 [get_ports {DAPLink_tri_o[4]}]
-set_property PACKAGE_PIN V13 [get_ports {DAPLink_tri_o[5]}]
-set_property PACKAGE_PIN U12 [get_ports {DAPLink_tri_o[6]}]
-set_property PACKAGE_PIN V15 [get_ports {DAPLink_tri_o[7]}]
-set_property PACKAGE_PIN V14 [get_ports {DAPLink_tri_o[8]}]
-set_property PACKAGE_PIN R13 [get_ports {DAPLink_tri_o[9]}]
-set_property PACKAGE_PIN P13 [get_ports {DAPLink_tri_o[10]}]
-set_property PACKAGE_PIN U16 [get_ports {DAPLink_tri_o[11]}]
-set_property PACKAGE_PIN U18 [get_ports {DAPLink_tri_o[12]}]
-set_property PACKAGE_PIN U17 [get_ports {DAPLink_tri_o[13]}]
-set_property PACKAGE_PIN V16 [get_ports {DAPLink_tri_o[14]}]
-set_property PACKAGE_PIN U15 [get_ports {DAPLink_tri_o[15]}]
 
 
 # Shield pin 41, (DAPLink[15]), is used for CS_CLK, (Serial Wire clock)
 # As this is not a dedicated clock input pin, Vivado needs to set to allow use of this input as a clock
-set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets {DAPLink_tri_o_IBUF[15]}]
 
 # --------------------------------------------------
 # Configuration pins
@@ -110,4 +88,5 @@ set_property CONFIG_VOLTAGE 3.3 [current_design]
 # Bitstream generation
 # --------------------------------------------------
 set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]
+
 

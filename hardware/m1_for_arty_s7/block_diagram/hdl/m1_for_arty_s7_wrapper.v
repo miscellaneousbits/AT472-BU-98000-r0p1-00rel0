@@ -1,7 +1,7 @@
 //Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2018.2 (win64) Build 2258646 Thu Jun 14 20:03:12 MDT 2018
-//Date        : Fri Sep 11 21:19:23 2020
+//Date        : Fri Sep 11 22:03:15 2020
 //Host        : QOSMIO running 64-bit major release  (build 9200)
 //Command     : generate_target m1_for_arty_s7_wrapper.bd
 //Design      : m1_for_arty_s7_wrapper
@@ -10,12 +10,10 @@
 `timescale 1 ps / 1 ps
 
 module m1_for_arty_s7_wrapper
-   (DAPLink_tri_o,
-    TDI,
-    TDO,
+   (UART_0_rxd,
+    UART_0_txd,
     dip_switches_4bits_tri_i,
     led_4bits_tri_o,
-    nTRST,
     push_buttons_4bits_tri_i,
     qspi_flash_io0_io,
     qspi_flash_io1_io,
@@ -24,15 +22,15 @@ module m1_for_arty_s7_wrapper
     qspi_flash_ss_io,
     reset,
     rgb_led_tri_o,
-    sys_clock,
-    usb_uart_rxd,
-    usb_uart_txd);
-  inout [15:0]DAPLink_tri_o;
-  input TDI;
-  output [0:0]TDO;
+    swclk,
+    swdi,
+    swdo,
+    swdoen,
+    sys_clock);
+  input UART_0_rxd;
+  output UART_0_txd;
   input [3:0]dip_switches_4bits_tri_i;
   output [3:0]led_4bits_tri_o;
-  input nTRST;
   input [3:0]push_buttons_4bits_tri_i;
   inout qspi_flash_io0_io;
   inout qspi_flash_io1_io;
@@ -41,16 +39,16 @@ module m1_for_arty_s7_wrapper
   inout qspi_flash_ss_io;
   input reset;
   output [5:0]rgb_led_tri_o;
+  input swclk;
+  input swdi;
+  output [0:0]swdo;
+  output swdoen;
   input sys_clock;
-  input usb_uart_rxd;
-  output usb_uart_txd;
 
-  wire [15:0]DAPLink_tri_o;
-  wire TDI;
-  wire [0:0]TDO;
+  wire UART_0_rxd;
+  wire UART_0_txd;
   wire [3:0]dip_switches_4bits_tri_i;
   wire [3:0]led_4bits_tri_o;
-  wire nTRST;
   wire [3:0]push_buttons_4bits_tri_i;
   wire qspi_flash_io0_i;
   wire qspi_flash_io0_io;
@@ -74,17 +72,17 @@ module m1_for_arty_s7_wrapper
   wire qspi_flash_ss_t;
   wire reset;
   wire [5:0]rgb_led_tri_o;
+  wire swclk;
+  wire swdi;
+  wire [0:0]swdo;
+  wire swdoen;
   wire sys_clock;
-  wire usb_uart_rxd;
-  wire usb_uart_txd;
 
   m1_for_arty_s7 m1_for_arty_s7_i
-       (.DAPLink_tri_o(DAPLink_tri_o),
-        .TDI(TDI),
-        .TDO(TDO),
+       (.UART_0_rxd(UART_0_rxd),
+        .UART_0_txd(UART_0_txd),
         .dip_switches_4bits_tri_i(dip_switches_4bits_tri_i),
         .led_4bits_tri_o(led_4bits_tri_o),
-        .nTRST(nTRST),
         .push_buttons_4bits_tri_i(push_buttons_4bits_tri_i),
         .qspi_flash_io0_i(qspi_flash_io0_i),
         .qspi_flash_io0_o(qspi_flash_io0_o),
@@ -103,9 +101,11 @@ module m1_for_arty_s7_wrapper
         .qspi_flash_ss_t(qspi_flash_ss_t),
         .reset(reset),
         .rgb_led_tri_o(rgb_led_tri_o),
-        .sys_clock(sys_clock),
-        .usb_uart_rxd(usb_uart_rxd),
-        .usb_uart_txd(usb_uart_txd));
+        .swclk(swclk),
+        .swdi(swdi),
+        .swdo(swdo),
+        .swdoen(swdoen),
+        .sys_clock(sys_clock));
   IOBUF qspi_flash_io0_iobuf
        (.I(qspi_flash_io0_o),
         .IO(qspi_flash_io0_io),

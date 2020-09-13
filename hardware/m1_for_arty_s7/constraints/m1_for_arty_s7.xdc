@@ -1,26 +1,4 @@
 # --------------------------------------------------
-# JTAG ports
-# --------------------------------------------------
-
-# JTAG connected to PMOD connector JC (nearest to device)
-#set_property PULLDOWN true [get_ports swclk]
-#set_property PULLUP true [get_ports swdio]
-
-set_property IOSTANDARD LVCMOS33 [get_ports swdio]
-
-# --------------------------------------------------
-# UART
-# --------------------------------------------------
-set_property IOSTANDARD LVCMOS33 [get_ports usb_uart_*]
-
-# *****************************************************************************
-# Timing
-# *****************************************************************************
-
-# Master clock frequencies derived from clock wizard
-
-
-# --------------------------------------------------
 # Clocks
 # --------------------------------------------------
 
@@ -67,8 +45,15 @@ create_clock -period 100.000 -name slow_out_clk
 # Unfortunately this overrides all other timing settings, including the desired set_max_delay.  See forum post
 # https://forums.xilinx.com/t5/Timing-Analysis/CDC-Constrains-set-clock-groups-precedes-set-max-delay/td-p/589843
 # Therefore better to do set_false_paths where necessary, and set_max_delay where desired.
-set_clock_groups -name async_group -asynchronous -group {cpu_clk} -group {SWCLK} -group {slow_out_clk}
+set_clock_groups -name async_group_0 -asynchronous \
+   -group cpu_clk \
+   -group SWCLK \
+   -group slow_out_clk
 
+set_clock_groups -name async_group_1 -asynchronous \
+   -group cclk \
+   -group qspi_clk
+   
 set_max_delay -from [get_clocks cpu_clk] -to [get_clocks -include_generated_clocks qspi_clk] -datapath_only 8.5
 set_max_delay -from [get_clocks -include_generated_clocks qspi_clk] -to [get_clocks cpu_clk] -datapath_only 17.0
 
@@ -84,12 +69,12 @@ set_max_delay -from [get_clocks cpu_clk] -to [get_clocks cclk] -datapath_only 9.
 # --------------------------------------------------
 # The DAP is asynchronous to the CPU, (SWCLK and cpu_clk).
 # However need to ensure that all signals pass across the relevant CDC structures quickly enough
-# This should be within 2 cycles of the fastest clock, (cpu_clk).  This is currently 110MHz, ~9ns.
+# This should be within 2 cycles of the fastest clock, (cpu_clk).  This is currently 100MHz, ~10ns.
 # We only wish to constrain the acutal datapath, we do not need to consider clock skew and jitter
 # as these are asychronous clocks
 # Set to be less that cpu_clk period for guaranteed transistion times.
-set_max_delay -from [get_clocks cpu_clk] -to [get_clocks SWCLK]   -datapath_only 8.0
-set_max_delay -from [get_clocks SWCLK]   -to [get_clocks cpu_clk] -datapath_only 8.0
+set_max_delay -from [get_clocks cpu_clk] -to [get_clocks SWCLK]   -datapath_only 9.0
+set_max_delay -from [get_clocks SWCLK]   -to [get_clocks cpu_clk] -datapath_only 9.0
 
 
 # *****************************************************************************
@@ -104,25 +89,20 @@ set_max_delay -from [get_clocks SWCLK]   -to [get_clocks cpu_clk] -datapath_only
 # Limiting factor is base QSPI Tco of 7ns.  Add extra 0.5ns for the board
 
 
-set_input_delay -clock [get_clocks cclk] -max -add_delay 7.500 [get_ports qspi_flash_io?_io]
-set_input_delay -clock [get_clocks cclk] -min -add_delay 1.500 [get_ports qspi_flash_io?_io]
-set_input_delay -clock [get_clocks cclk] -max -add_delay 7.500 [get_ports qspi_flash_ss*]
-set_input_delay -clock [get_clocks cclk] -min -add_delay 1.500 [get_ports qspi_flash_ss*]
+set_input_delay -clock [get_clocks cclk] -max -add_delay 7.5 [get_ports qspi_flash_io?_io]
+set_input_delay -clock [get_clocks cclk] -min -add_delay 1.5 [get_ports qspi_flash_io?_io]
+set_input_delay -clock [get_clocks cclk] -max -add_delay 7.5 [get_ports qspi_flash_ss*]
+set_input_delay -clock [get_clocks cclk] -min -add_delay 1.5 [get_ports qspi_flash_ss*]
 
-set_output_delay -clock [get_clocks cclk] -max -add_delay 2.500 [get_ports qspi_flash_io?_io]
-set_output_delay -clock [get_clocks cclk] -min -add_delay -3.500 [get_ports qspi_flash_io?_io]
-set_output_delay -clock [get_clocks cclk] -max -add_delay 2.500 [get_ports qspi_flash_ss*]
-set_output_delay -clock [get_clocks cclk] -min -add_delay -3.500 [get_ports qspi_flash_ss*]
+set_output_delay -clock [get_clocks cclk] -max -add_delay 2.5 [get_ports qspi_flash_io?_io]
+set_output_delay -clock [get_clocks cclk] -min -add_delay -3.5 [get_ports qspi_flash_io?_io]
+set_output_delay -clock [get_clocks cclk] -max -add_delay 2.5 [get_ports qspi_flash_ss*]
+set_output_delay -clock [get_clocks cclk] -min -add_delay -3.5 [get_ports qspi_flash_ss*]
 
 # --------------------------------------------------
 # Debug signals
 # --------------------------------------------------
 
-# Large input Tsu, as clock insertion delay is a lot shorter than datapath input delay.
-
-
-# JTAG
-# Note, these are optional ports and may be removed from the build
 set_input_delay  -clock [get_clocks SWCLK] -add_delay 5.0 [get_ports swdio]
 set_output_delay -clock [get_clocks SWCLK] -add_delay 5.0 [get_ports swdio]
 
@@ -138,11 +118,11 @@ set_input_delay  -clock [get_clocks slow_out_clk] -add_delay 0.5 [get_ports usb_
 set_output_delay -clock [get_clocks slow_out_clk] -add_delay 0.5 [get_ports usb_uart_txd]
 
 # Switch inputs
-set_input_delay -clock [get_clocks slow_out_clk] -add_delay 0.500 [get_ports dip_switches*]
-set_input_delay -clock [get_clocks slow_out_clk] -add_delay 0.500 [get_ports push_buttons*]
+set_input_delay -clock [get_clocks slow_out_clk] -add_delay 0.5 [get_ports dip_switches*]
+set_input_delay -clock [get_clocks slow_out_clk] -add_delay 0.5 [get_ports push_buttons*]
 
 # Reset
-set_input_delay -clock [get_clocks cpu_clk] -add_delay 0.500 [get_ports reset*]
+set_input_delay -clock [get_clocks cpu_clk] -add_delay 0.5 [get_ports reset*]
 # Prevent reset from timing from cpu_clk to qspi_clk
 set_false_path -from [get_ports reset*] -to [get_clocks qspi_clk]
 
@@ -150,22 +130,22 @@ set_false_path -from [get_ports reset*] -to [get_clocks qspi_clk]
 set_output_delay -clock [get_clocks slow_out_clk] -add_delay 0.5 [get_ports led_4bits*]
 set_output_delay -clock [get_clocks slow_out_clk] -add_delay 0.5 [get_ports rgb_led*]
 
-set_property IOSTANDARD LVCMOS33 [get_ports usb_uart_rxd]
-set_property IOSTANDARD LVCMOS33 [get_ports usb_uart_txd]
+set_property IOSTANDARD LVCMOS33 [get_ports usb_uart_*]
 set_property PACKAGE_PIN V12 [get_ports usb_uart_txd]
 set_property PACKAGE_PIN R12 [get_ports usb_uart_rxd]
 
 set_property IOSTANDARD LVCMOS33 [get_ports swdclk]
 set_property PACKAGE_PIN G16 [get_ports swdclk]
 set_property PULLDOWN true [get_ports swdclk]
+
 set_property IOSTANDARD LVCMOS33 [get_ports swdio]
 set_property PACKAGE_PIN R14 [get_ports swdio]
 set_property PULLUP true [get_ports swdio]
 
-set_property IOSTANDARD SSTL135 [get_ports {dip_switches_4bits_tri_i[3]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {dip_switches_4bits_tri_i[2]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {dip_switches_4bits_tri_i[1]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {dip_switches_4bits_tri_i[0]}]
+set_property IOSTANDARD SSTL135 [get_ports dip_switches_4bits_tri_i[3]]
+set_property IOSTANDARD LVCMOS33 [get_ports dip_switches_4bits_tri_i[2]]
+set_property IOSTANDARD LVCMOS33 [get_ports dip_switches_4bits_tri_i[1]]
+set_property IOSTANDARD LVCMOS33 [get_ports dip_switches_4bits_tri_i[0]]
 
 set_property INTERNAL_VREF 0.675 [get_iobanks 34]
 

@@ -167,7 +167,12 @@ set_property PACKAGE_PIN V12 [get_ports UART_0_txd]
 set_property PACKAGE_PIN R12 [get_ports UART_0_rxd]
 
 set_property PACKAGE_PIN T14 [get_ports swio]
-set_property IOSTANDARD LVCMOS33 [get_ports {dip_switches_4bits_tri_i[3]}]
+set_property IOSTANDARD SSTL135 [get_ports {dip_switches_4bits_tri_i[3]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {dip_switches_4bits_tri_i[2]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {dip_switches_4bits_tri_i[1]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {dip_switches_4bits_tri_i[0]}]
+
+set_property INTERNAL_VREF 0.675 [get_iobanks 34]
+
+set_property PULLUP true [get_ports swio]
+set_property PULLDOWN true [get_ports swclk]

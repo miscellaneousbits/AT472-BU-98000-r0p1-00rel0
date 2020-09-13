@@ -309,6 +309,14 @@
           <spirit:configurableElementValue spirit:referenceId="bd:xciName">m1_for_arty_s7_iopin_0_0</spirit:configurableElementValue>
         </spirit:configurableElementValues>
       </spirit:componentInstance>
+      <spirit:componentInstance>
+        <spirit:instanceName>xlconstant_0</spirit:instanceName>
+        <spirit:componentRef spirit:library="ip" spirit:name="xlconstant" spirit:vendor="xilinx.com" spirit:version="1.1"/>
+        <spirit:configurableElementValues>
+          <spirit:configurableElementValue spirit:referenceId="bd:xciName">m1_for_arty_s7_xlconstant_0_0</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="CONST_VAL">0</spirit:configurableElementValue>
+        </spirit:configurableElementValues>
+      </spirit:componentInstance>
     </spirit:componentInstances>
     <spirit:interconnections>
       <spirit:interconnection>
@@ -460,6 +468,12 @@
         <spirit:name>CORTEXM1_AXI_0_SWDO</spirit:name>
         <spirit:internalPortReference spirit:componentRef="CORTEXM1_AXI_0" spirit:portRef="SWDO"/>
         <spirit:internalPortReference spirit:componentRef="iopin_0" spirit:portRef="i"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>xlconstant_0_dout</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="xlconstant_0" spirit:portRef="dout"/>
+        <spirit:internalPortReference spirit:componentRef="CORTEXM1_AXI_0" spirit:portRef="DBGRESTART"/>
+        <spirit:internalPortReference spirit:componentRef="CORTEXM1_AXI_0" spirit:portRef="NMI"/>
       </spirit:adHocConnection>
     </spirit:adHocConnections>
     <spirit:hierConnections>
@@ -751,8 +765,8 @@
       <spirit:adHocConnection>
         <spirit:name>i_inv_dbgresetn_Res</spirit:name>
         <spirit:internalPortReference spirit:componentRef="i_inv_dbgresetn" spirit:portRef="Res"/>
-        <spirit:externalPortReference spirit:portRef="dbgresetn"/>
         <spirit:externalPortReference spirit:portRef="sysresetn"/>
+        <spirit:externalPortReference spirit:portRef="dbgresetn"/>
       </spirit:adHocConnection>
       <spirit:adHocConnection>
         <spirit:name>clk_wiz_0_clk_out2</spirit:name>

@@ -46,7 +46,9 @@ create_clock -period 50.000 -name SWCLK [get_ports swdclk]
 # For S7 board, the CCLK pin is used as the base qspi clock pin.
 # See answer record https://www.xilinx.com/support/answers/63174.html
 # -combinational option creates a divide_by 1 path through combinational logic
-create_generated_clock -name cclk -source [get_pins -hier -regexp m1_for_arty_s7_i/axi_quad_spi_0/.*STARTUP2_7SERIES_inst/USRCCLKO] -combinational [get_pins -hier -regexp m1_for_arty_s7_i/axi_quad_spi_0/.*STARTUP2_7SERIES_inst/USRCCLKO]
+create_generated_clock -name cclk \
+   -source [get_pins -hier -regexp m1_for_arty_s7_i/axi_quad_spi_0/.*STARTUP2_7SERIES_inst/USRCCLKO] \
+   -combinational [get_pins -hier -regexp m1_for_arty_s7_i/axi_quad_spi_0/.*STARTUP2_7SERIES_inst/USRCCLKO]
 set_clock_latency -min 0.500 [get_clocks cclk]
 set_clock_latency -max 6.700 [get_clocks cclk]
 

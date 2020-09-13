@@ -433,10 +433,6 @@
         <spirit:name>Clocks_and_Resets_sysresetn</spirit:name>
         <spirit:internalPortReference spirit:componentRef="Clocks_and_Resets" spirit:portRef="sysresetn"/>
         <spirit:internalPortReference spirit:componentRef="CORTEXM1_AXI_0" spirit:portRef="SYSRESETn"/>
-      </spirit:adHocConnection>
-      <spirit:adHocConnection>
-        <spirit:name>Clocks_and_Resets_dbgresetn</spirit:name>
-        <spirit:internalPortReference spirit:componentRef="Clocks_and_Resets" spirit:portRef="dbgresetn"/>
         <spirit:internalPortReference spirit:componentRef="CORTEXM1_AXI_0" spirit:portRef="DBGRESETn"/>
       </spirit:adHocConnection>
       <spirit:adHocConnection>
@@ -647,16 +643,6 @@
           </spirit:wire>
         </spirit:port>
         <spirit:port>
-          <spirit:name>dbgresetn</spirit:name>
-          <spirit:wire>
-            <spirit:direction>out</spirit:direction>
-            <spirit:vector>
-              <spirit:left>0</spirit:left>
-              <spirit:right>0</spirit:right>
-            </spirit:vector>
-          </spirit:wire>
-        </spirit:port>
-        <spirit:port>
           <spirit:name>ext_spi_clk</spirit:name>
           <spirit:wire>
             <spirit:direction>out</spirit:direction>
@@ -766,7 +752,6 @@
         <spirit:name>i_inv_dbgresetn_Res</spirit:name>
         <spirit:internalPortReference spirit:componentRef="i_inv_dbgresetn" spirit:portRef="Res"/>
         <spirit:externalPortReference spirit:portRef="sysresetn"/>
-        <spirit:externalPortReference spirit:portRef="dbgresetn"/>
       </spirit:adHocConnection>
       <spirit:adHocConnection>
         <spirit:name>clk_wiz_0_clk_out2</spirit:name>
